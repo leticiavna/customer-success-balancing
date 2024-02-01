@@ -11,7 +11,7 @@ function getBalanceCustomersLengthByCss(sortedCustomers, sortedActiveCss) {
   const balancedCustomers = sortedActiveCss.reduce((accumulator, currentCss) => {
     const customersToAttend = sortedCustomers.filter((customer) => customer.score <= currentCss.score);
     accumulator[currentCss.id] =  customersToAttend.length;
-    sortedCustomers = sortedCustomers.splice(0, customersToAttend.length - 1);
+    sortedCustomers = sortedCustomers.splice(0, customersToAttend.length ? customersToAttend.length - 1 : 0);
     return accumulator;
   }, {});
   return balancedCustomers;
