@@ -1,3 +1,22 @@
+function sortByScore(itemA, itemB) {
+  return itemA.score - itemB.score;
+}
+
+function getActiveSortedCss(css, cssAway) {
+  const active = css.filter((cs) => !cssAway.includes(cs.id));
+  return active.sort(sortByScore);
+}
+
+function getBalanceCustomersLengthByCss(sortedCustomers, sortedActiveCss) {
+  const balancedCustomers = sortedActiveCss.reduce((accumulator, currentCss) => {
+    const customersToAttend = sortedCustomers.filter((customer) => customer.score <= currentCss.score);
+    accumulator[currentCss.id] =  customersToAttend.length;
+    sortedCustomers = sortedCustomers.splice(0, customersToAttend.length - 1);
+    return accumulator;
+  }, {});
+  return balancedCustomers;
+}
+
 /**
  * Returns the id of the CustomerSuccess with the most customers
  * @param {array} customerSuccess
@@ -7,13 +26,17 @@
 function customerSuccessBalancing(
   customerSuccess,
   customers,
-  customerSuccessAway
+  customerSuccessAway,
 ) {
-  /**
-   * ===============================================
-   * =========== Write your solution here ==========
-   * ===============================================
-   */
+  const customersSorted = customers.sort(sortByScore);
+  const activeSortedCss = getActiveSortedCss(customerSuccess, customerSuccessAway);
+  const balancedCustomers = getBalanceCustomersLengthByCss(customersSorted, activeSortedCss);
+  const lengths = Object.entries(balancedCustomers);
+  const [firstElement, secondElement] =  lengths.sort(([, v1], [, v2]) => v2 - v1);
+  const [k1, v1] = firstElement;
+  const [, v2] = secondElement;
+
+  return v1 === v2 ? 0 : parseInt(k1, 10);
 }
 
 test("Scenario 1", () => {
