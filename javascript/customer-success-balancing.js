@@ -17,6 +17,15 @@ function getBalancedCustomersByCustomerSuccess(sortedCustomers, sortedActiveCust
   return balancedCustomers;
 }
 
+function getTopCustomerSuccessId(balancedCustomers) {
+  const sortedBalancedCustomers = Object.entries(balancedCustomers)
+    .sort(([, firstNumberOfCustomers], [, secondNumberOfCustomers]) => secondNumberOfCustomers - firstNumberOfCustomers);
+  const [firstCssId, firstNumberOfCustomers = 0] =  sortedBalancedCustomers[0] || [];
+  const [, secondNumberOfCustomers = 0] =  sortedBalancedCustomers[1] || [];
+
+  return firstNumberOfCustomers === secondNumberOfCustomers ? 0 : parseInt(firstCssId, 10);
+}
+
 /**
  * Returns the id of the CustomerSuccess with the most customers
  * @param {array} customerSuccess
@@ -31,11 +40,7 @@ function customerSuccessBalancing(
   const customersSorted = customers.sort(sortByScore);
   const activeSortedCss = getActiveSortedCustomerSuccess(customerSuccess, customerSuccessAway);
   const balancedCustomers = getBalancedCustomersByCustomerSuccess(customersSorted, activeSortedCss);
-  const sortedBalancedCustomers = Object.entries(balancedCustomers).sort(([, firstNumberOfCustomers], [, secondNumberOfCustomers]) => secondNumberOfCustomers - firstNumberOfCustomers);
-  const [firstCssId, firstNumberOfCustomers = 0] =  sortedBalancedCustomers[0] || [];
-  const [, secondNumberOfCustomers = 0] =  sortedBalancedCustomers[1] || [];
-
-  return firstNumberOfCustomers === secondNumberOfCustomers ? 0 : parseInt(firstCssId, 10);
+  return getTopCustomerSuccessId(balancedCustomers);
 }
 
 test("Scenario 1", () => {
