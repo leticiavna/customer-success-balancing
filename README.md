@@ -1,18 +1,12 @@
 # RD Challenge
-## Nossas expectativas
-A equipe de engenharia da RDStation tem alguns princípios onde baseamos nosso trabalho diário. Um deles é: Projete seu código para ser mais fácil de entender, não mais fácil de escrever. 
 
-Portanto, para nós é mais importante um código de fácil leitura do que um que utilize recursos complexos e/ou desnecessários.
+## Versões utilizadas no projeto
 
-O que gostariamos de ver:
+O desafio foi feito em Javascript, portanto, é preciso utilizar o node e o npm para rodar os testes.
+Foram utilizadas as seguintes versões:
 
-- O código deve ser fácil de ler. [Clean Code](https://medium.com/rd-shipit/clean-code-23580b4e556c) pode te ajudar
-- Notas gerais e informações sobre a versão da linguagem e outras informações importantes para executar seu código.
-- Código que se preocupa com a performance (Complexidade de Algoritmo)
-- O seu código deve cobrir todo os casos de usos presentes no README, mesmo que não haja um teste implementado para tal.
-- Você deve enviar para nós `um arquivo zip` contendo o código-fonte da solução e as instruções para rodá-lo ou pode fazer
-o upload da solução para repositórios públicos (GitHub, BitBucket, etc) e nos enviar o link de acesso.
-- Testes. Você pode adicionar novos testes, mas sem alterar o pacote original
+- node v21.6.1
+- npm 10.2.4
 
 ## O Desafio - CustomerSuccess Balancing
 
@@ -72,19 +66,3 @@ Para este exemplo o retorno deve ser `1`, que é o id do CS que atende 4 cliente
 ```
 1
 ```
-## Choose your weapon:
-Nós vamos aceitar o teste em qualquer uma das linguagens abaixo.
-### Testes já implementados
-- [Ruby](ruby/README.md) 
-- [JavaScript](javascript/README.md)
-- [Java](java/README.md)
-- [Go](go/README.md)
-
-
-### Você precisa implementar os testes
-- C#
-- Python
-  
-
-## Download
-Você pode fazer o download do desafio aqui para as linguagens que já tem o teste implementado: [Link](./challenge.zip)
