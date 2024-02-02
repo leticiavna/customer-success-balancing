@@ -32,7 +32,8 @@ function customerSuccessBalancing(
   const activeSortedCss = getActiveSortedCustomerSuccess(customerSuccess, customerSuccessAway);
   const balancedCustomers = getBalancedCustomersByCustomerSuccess(customersSorted, activeSortedCss);
   const sortedBalancedCustomers = Object.entries(balancedCustomers).sort(([, firstNumberOfCustomers], [, secondNumberOfCustomers]) => secondNumberOfCustomers - firstNumberOfCustomers);
-  const [[firstCssId, firstNumberOfCustomers], [, secondNumberOfCustomers]] =  sortedBalancedCustomers;
+  const [firstCssId, firstNumberOfCustomers = 0] =  sortedBalancedCustomers[0] || [];
+  const [, secondNumberOfCustomers = 0] =  sortedBalancedCustomers[1] || [];
 
   return firstNumberOfCustomers === secondNumberOfCustomers ? 0 : parseInt(firstCssId, 10);
 }
