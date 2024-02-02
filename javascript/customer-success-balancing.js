@@ -2,16 +2,16 @@ function sortByScore(itemA, itemB) {
   return itemA.score - itemB.score;
 }
 
-function getActiveSortedCss(css, cssAway) {
-  const active = css.filter((cs) => !cssAway.includes(cs.id));
-  return active.sort(sortByScore);
+function getActiveSortedCustomerSuccess(customerSuccess, cssAway) {
+  const activeCss = customerSuccess.filter((cs) => !cssAway.includes(cs.id));
+  return activeCss.sort(sortByScore);
 }
 
-function getBalanceCustomersLengthByCss(sortedCustomers, sortedActiveCss) {
-  const balancedCustomers = sortedActiveCss.reduce((accumulator, currentCss) => {
+function getBalancedCustomersByCustomerSuccess(sortedCustomers, sortedActiveCustomerSuccess) {
+  const balancedCustomers = sortedActiveCustomerSuccess.reduce((accumulator, currentCss) => {
     const customersToAttend = sortedCustomers.filter((customer) => customer.score <= currentCss.score);
     accumulator[currentCss.id] =  customersToAttend.length;
-    sortedCustomers = sortedCustomers.splice(0, customersToAttend.length ? customersToAttend.length - 1 : 0);
+    sortedCustomers = customersToAttend.length > 0 ? sortedCustomers.slice(customersToAttend.length) : sortedCustomers;
     return accumulator;
   }, {});
   return balancedCustomers;
@@ -29,14 +29,12 @@ function customerSuccessBalancing(
   customerSuccessAway,
 ) {
   const customersSorted = customers.sort(sortByScore);
-  const activeSortedCss = getActiveSortedCss(customerSuccess, customerSuccessAway);
-  const balancedCustomers = getBalanceCustomersLengthByCss(customersSorted, activeSortedCss);
-  const lengths = Object.entries(balancedCustomers);
-  const [firstElement, secondElement] =  lengths.sort(([, v1], [, v2]) => v2 - v1);
-  const [k1, v1] = firstElement;
-  const [, v2] = secondElement;
+  const activeSortedCss = getActiveSortedCustomerSuccess(customerSuccess, customerSuccessAway);
+  const balancedCustomers = getBalancedCustomersByCustomerSuccess(customersSorted, activeSortedCss);
+  const sortedBalancedCustomers = Object.entries(balancedCustomers).sort(([, firstNumberOfCustomers], [, secondNumberOfCustomers]) => secondNumberOfCustomers - firstNumberOfCustomers);
+  const [[firstCssId, firstNumberOfCustomers], [, secondNumberOfCustomers]] =  sortedBalancedCustomers;
 
-  return v1 === v2 ? 0 : parseInt(k1, 10);
+  return firstNumberOfCustomers === secondNumberOfCustomers ? 0 : parseInt(firstCssId, 10);
 }
 
 test("Scenario 1", () => {
@@ -138,4 +136,12 @@ test("Scenario 8", () => {
   const customers = mapEntities([90, 70, 20, 40, 60, 10]);
   const csAway = [2, 4];
   expect(customerSuccessBalancing(css, customers, csAway)).toEqual(1);
+});
+
+test("Scenario 9", () => {
+  const css = mapEntities([11, 21, 31]);
+  const customers = mapEntities([10, 10, 10, 20, 20, 30, 30, 30, 20, 60]);
+  const csAway = [];
+
+  expect(customerSuccessBalancing(css, customers, csAway)).toEqual(0);
 });
