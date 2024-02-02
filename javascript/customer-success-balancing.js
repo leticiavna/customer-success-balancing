@@ -8,12 +8,14 @@ function getActiveSortedCustomerSuccess(customerSuccess, cssAway) {
 }
 
 function getBalancedCustomersByCustomerSuccess(sortedCustomers, sortedActiveCustomerSuccess) {
-  const balancedCustomers = sortedActiveCustomerSuccess.reduce((accumulator, currentCss) => {
+  const balancedCustomers = {};
+
+  sortedActiveCustomerSuccess.forEach((currentCss) => {
     const customersToAttend = sortedCustomers.filter((customer) => customer.score <= currentCss.score);
-    accumulator[currentCss.id] =  customersToAttend.length;
-    sortedCustomers = customersToAttend.length > 0 ? sortedCustomers.slice(customersToAttend.length) : sortedCustomers;
-    return accumulator;
-  }, {});
+    balancedCustomers[currentCss.id] =  customersToAttend.length;
+    sortedCustomers.splice(0, customersToAttend.length);
+  });
+
   return balancedCustomers;
 }
 
@@ -148,6 +150,14 @@ test("Scenario 9", () => {
   const css = mapEntities([11, 21, 31]);
   const customers = mapEntities([10, 10, 10, 20, 20, 30, 30, 30, 20, 60]);
   const csAway = [];
+
+  expect(customerSuccessBalancing(css, customers, csAway)).toEqual(0);
+});
+
+test("Scenario 10", () => {
+  const css = mapEntities([11, 21, 31]);
+  const customers = mapEntities([10, 10, 10, 20, 20, 30, 30, 30, 20, 60]);
+  const csAway = [1, 2, 3];
 
   expect(customerSuccessBalancing(css, customers, csAway)).toEqual(0);
 });
